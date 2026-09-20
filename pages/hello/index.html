@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hello</title>
+    <link rel="icon" href="./assets/logo.svg" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="card">
+      <img class="logo" src="./assets/logo.svg" alt="" width="64" height="64" />
+      <h1>Hello</h1>
+      <p class="hint">Type your name and say hello.</p>
+      <form class="form" id="form">
+        <input
+          id="name"
+          type="text"
+          placeholder="Your name"
+          autocomplete="off"
+        />
+        <button type="submit">Greet</button>
+      </form>
+      <p class="output" id="output" aria-live="polite"></p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

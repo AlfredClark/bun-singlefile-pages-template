@@ -1,0 +1,17 @@
+{
+  "name": "bun-singlefile-pages-template",
+  "description": "A Bun multi-page static template.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "bun run build:single && bun run build:split",
+    "build:single": "bun scripts/single-build.ts",
+    "build:split": "bun scripts/split-build.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  }
+}
