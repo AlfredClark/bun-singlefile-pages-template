@@ -27,7 +27,9 @@ async function discoverPages(): Promise<string[]> {
   return pages.sort();
 }
 
-export async function resolvePages(rawArg: string | undefined): Promise<string[]> {
+export async function resolvePages(
+  rawArg: string | undefined,
+): Promise<string[]> {
   const arg = !rawArg || rawArg === "--all" ? rawArg : normalizePage(rawArg);
   const pages = !arg || arg === "--all" ? await discoverPages() : [arg];
 

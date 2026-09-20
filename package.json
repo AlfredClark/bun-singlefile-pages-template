@@ -6,12 +6,21 @@
   "scripts": {
     "build": "bun run build:single && bun run build:split",
     "build:single": "bun scripts/single-build.ts",
-    "build:split": "bun scripts/split-build.ts"
+    "build:split": "bun scripts/split-build.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@eslint/js": "^10.0.1",
+    "@types/bun": "latest",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.8",
+    "typescript-eslint": "^8.70.0"
   },
   "peerDependencies": {
-    "typescript": "^7"
+    "typescript": "^6.0.2"
   }
 }

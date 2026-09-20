@@ -4,7 +4,8 @@ import { entryFor, resolvePages, root } from "./pages.ts";
 const outDir = join(root, "dist", "single");
 
 const SIZE_WARN_BYTES = 1_000_000;
-const RELATIVE_ASSET_ATTR = /\b(?:src|srcset|poster)\s*=\s*["'](?!data:|https?:|\/\/|#)/gi;
+const RELATIVE_ASSET_ATTR =
+  /\b(?:src|srcset|poster)\s*=\s*["'](?!data:|https?:|\/\/|#)/gi;
 const RELATIVE_CSS_URL = /url\(\s*["']?(?!data:|https?:|\/\/|#)/gi;
 
 function findUninlined(html: string): string[] {
