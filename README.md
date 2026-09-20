@@ -1,24 +1,26 @@
+English | [简体中文](./README_zh-CN.md)
+
 # bun-singlefile-pages-template
 
-基于 Bun 的多页面静态站模板：`pages/` 下的每个目录都可以构建成两种产物 —— **单文件**（全部内联）或 **拆分目录**（HTML / JS / CSS / 资源分离）。
+A Bun-based multi-page static site template: every directory under `pages/` can be built into two kinds of output — a **single file** (everything inlined) or a **split directory** (HTML / JS / CSS / assets kept separate).
 
-## 目录结构
+## Directory structure
 
 ```
 pages/
   clock/
-    index.html      # 页面入口（必需）
-    main.ts         # 该页脚本（可选）
-    style.css       # 该页样式（可选）
-    assets/         # 该页资源（可选）
+    index.html      # page entry (required)
+    main.ts         # page script (optional)
+    style.css       # page styles (optional)
+    assets/         # page assets (optional)
       logo.svg
   counter/
   hello/
 scripts/
-  pages.ts          # 页面发现与参数解析（两个构建脚本共用）
-  single-build.ts   # 单文件模式
-  split-build.ts    # 拆分模式
-dist/               # 构建产物（已 gitignore）
+  pages.ts          # page discovery + arg parsing (shared by both build scripts)
+  single-build.ts   # single-file mode
+  split-build.ts    # split mode
+dist/               # build output (gitignored)
   single/
     clock.html
   split/
@@ -28,76 +30,76 @@ dist/               # 构建产物（已 gitignore）
       chunk-<hash>.css
 ```
 
-## 页面与资源约定
+## Pages and asset conventions
 
-- 每个页面是 `pages/` 下的一个**直接子目录**，必须包含 `index.html`，目录名即产物名（`pages/clock/` → `clock`）。
-- 以 `.` 或 `_` 开头的目录会被跳过。
-- 资源放在该页的 `assets/` 子目录下，并用**相对路径**引用：
-  - HTML：`<img src="./assets/logo.svg">`、`<link rel="icon" href="./assets/logo.svg">`
-  - CSS：`url("./assets/bg.png")`、`url("./assets/font.woff2")`
-  - JS：`import "./styles.css"`
-- 绝对 URL（`https://…`）不会被处理，按外链原样保留。
+- Every page is a **direct subdirectory** of `pages/` and must contain `index.html`; the directory name becomes the output name (`pages/clock/` → `clock`).
+- Directories starting with `.` or `_` are skipped.
+- Assets live in the page's `assets/` subdirectory and are referenced with **relative paths**:
+  - HTML: `<img src="./assets/logo.svg">`, `<link rel="icon" href="./assets/logo.svg">`
+  - CSS: `url("./assets/bg.png")`, `url("./assets/font.woff2")`
+  - JS: `import "./styles.css"`
+- Absolute URLs (`https://…`) are left untouched and stay as external links.
 
-## 两种构建模式
+## The two build modes
 
-| 模式   | 脚本              | 产物                      | 特点                                                                                  |
-| ------ | ----------------- | ------------------------- | ------------------------------------------------------------------------------------- |
-| 单文件 | `single-build.ts` | `dist/single/<name>.html` | JS、CSS、资源全部内联，一个文件即完整页面，可直接双击打开或单独上传                   |
-| 拆分   | `split-build.ts`  | `dist/split/<name>/`      | `index.html` + 独立 JS/CSS + 带哈希的资源，路径自动重写；适合需要缓存与按需加载的部署 |
+| Mode   | Script            | Output                    | Notes                                                                                                        |
+| ------ | ----------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Single | `single-build.ts` | `dist/single/<name>.html` | JS, CSS and assets all inlined — one file is the whole page; just double-click it or upload it on its own    |
+| Split  | `split-build.ts`  | `dist/split/<name>/`      | `index.html` + separate JS/CSS + content-hashed assets, with paths rewritten; suits caching and lazy loading |
 
-拆分模式下资源会保留 `assets/` 目录结构并附加内容哈希，例如 `dist/split/hello/assets/logo-4n681ck3.svg`。
+In split mode, assets keep their `assets/` directory structure and get a content hash, e.g. `dist/split/hello/assets/logo-4n681ck3.svg`.
 
-## 构建
+## Build
 
-| 命令                             | 说明                                                           |
-| -------------------------------- | -------------------------------------------------------------- |
-| `bun run build`                  | 依次执行单文件与拆分两种构建                                   |
-| `bun run build:single`           | 只构建单文件模式（全部页面）                                   |
-| `bun run build:split`            | 只构建拆分模式（全部页面）                                     |
-| `bun run build:single -- <name>` | 只构建指定页面的单文件产物，如 `bun run build:single -- hello` |
-| `bun run build:split -- <name>`  | 只构建指定页面的拆分产物                                       |
+| Command                          | Description                                                   |
+| -------------------------------- | ------------------------------------------------------------- |
+| `bun run build`                  | Build both modes, single then split                           |
+| `bun run build:single`           | Build single-file mode only (all pages)                       |
+| `bun run build:split`            | Build split mode only (all pages)                             |
+| `bun run build:single -- <name>` | Build a single page's single-file output, e.g. `... -- hello` |
+| `bun run build:split -- <name>`  | Build a single page's split output                            |
 
-也可以直接调用脚本，例如 `bun scripts/split-build.ts hello`、`bun scripts/single-build.ts --all`。
+You can also call the scripts directly, e.g. `bun scripts/split-build.ts hello` or `bun scripts/single-build.ts --all`.
 
-## 代码质量
+## Code quality
 
-| 命令                   | 说明                          |
-| ---------------------- | ----------------------------- |
-| `bun run lint`         | ESLint 检查（含类型感知规则） |
-| `bun run lint:fix`     | ESLint 检查并自动修复         |
-| `bun run format`       | Prettier 格式化所有文件       |
-| `bun run format:check` | 只检查格式，不写入            |
+| Command                | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `bun run lint`         | ESLint check (including type-aware rules) |
+| `bun run lint:fix`     | ESLint check with automatic fixes         |
+| `bun run format`       | Format every file with Prettier           |
+| `bun run format:check` | Check formatting only, without writing    |
 
-- ESLint 使用 flat config（`eslint.config.js`），基于 `typescript-eslint` 的 `recommendedTypeChecked`，因此启用了类型感知规则（如 `no-floating-promises`、`require-await`）。
-- Prettier 配置在 `.prettierrc.json`；`dist/`、`bun.lock`、`.commandcode/`、`.idea/` 已在 `.prettierignore` 中排除。
-- 两者分工：Prettier 负责格式化，`eslint-config-prettier` 关闭所有与格式冲突的规则。
+- ESLint uses flat config (`eslint.config.js`), built on `typescript-eslint`'s `recommendedTypeChecked`, so type-aware rules such as `no-floating-promises` and `require-await` are enabled.
+- Prettier is configured in `.prettierrc.json`; `dist/`, `bun.lock`, `.commandcode/` and `.idea/` are excluded via `.prettierignore`.
+- Division of labour: Prettier handles formatting, and `eslint-config-prettier` turns off every rule that would conflict with it.
 
-### 为什么固定 TypeScript 6
+### Why TypeScript is pinned to 6
 
-TypeScript 7 是原生（Go）实现，**不提供编程 API**，而 `typescript-eslint` 依赖该 API —— 它在检测到 TS ≥ 7 时会直接抛错（peer 范围 `>=4.8.4 <6.1.0`）。
+TypeScript 7 is the native (Go) implementation and **ships no programmatic API**, which `typescript-eslint` depends on — it throws outright as soon as it detects TS ≥ 7 (its peer range is `>=4.8.4 <6.1.0`).
 
-所以本项目把 `typescript` 固定为 `^6.0.2`，这是 ESLint 能运行的前提。微软官方的并行方案（将 `typescript` 别名到 `@typescript/typescript6`）在当前 Bun 版本下不可用：Bun 会把根级的 `typescript` 别名泄漏进传递依赖，导致该兼容包内部的 `@typescript/old: npm:typescript@^6` 解析回它自身，形成循环 `require` 并返回空对象。
+So this project pins `typescript` to `^6.0.2`, which is a prerequisite for ESLint to run at all. Microsoft's official side-by-side approach (aliasing `typescript` to `@typescript/typescript6`) does not work on the current Bun version: Bun leaks the root-level `typescript` alias into transitive dependencies, so the compat package's own `@typescript/old: npm:typescript@^6` dependency resolves back to itself, producing a circular `require` that returns an empty object.
 
-待 `typescript-eslint` 支持 TS 7.1 后（typescript-eslint#10940），可再升回 TS 7。
+Once `typescript-eslint` supports TS 7.1 (typescript-eslint#10940), TypeScript 7 can be restored.
 
-## 单文件模式的内联规则
+## Inlining rules (single-file mode)
 
-Bun 的 Standalone HTML 模式（`compile: true` + `target: "browser"` + HTML 入口）会自动内联：
+Bun's Standalone HTML mode (`compile: true` + `target: "browser"` + an HTML entrypoint) inlines automatically:
 
-| 源码                                             | 产物                          |
-| ------------------------------------------------ | ----------------------------- |
-| `<script src="./main.ts">`                       | 内联 `<script type="module">` |
-| `<link rel="stylesheet" href="./style.css">`     | 内联 `<style>`                |
-| `<img>` / `<link rel="icon">` / `<video poster>` | `data:` URI                   |
-| `<video>` / `<audio>` / `<source>`               | `data:` URI                   |
-| CSS `url(...)`、`@import`、JS `import "*.css"`   | 内联进 `<style>`              |
+| Source                                           | Output                          |
+| ------------------------------------------------ | ------------------------------- |
+| `<script src="./main.ts">`                       | inline `<script type="module">` |
+| `<link rel="stylesheet" href="./style.css">`     | inline `<style>`                |
+| `<img>` / `<link rel="icon">` / `<video poster>` | `data:` URI                     |
+| `<video>` / `<audio>` / `<source>`               | `data:` URI                     |
+| CSS `url(...)`, `@import`, JS `import "*.css"`   | inlined into `<style>`          |
 
-只有相对路径才会被内联。构建时会校验产物中是否残留相对引用（残留即说明未内联），并对体积过大的页面告警。
+Only relative paths get inlined. The build verifies that no relative references are left behind in the output (leftovers mean something was not inlined) and warns about pages that are too large.
 
-## 局限（仅单文件模式）
+## Limitations (single-file mode only)
 
-- 大文件（视频等）内联后体积约增加 33%（base64）；超过 1 MB 会告警，过大时建议改用拆分模式。
-- 不支持 `splitting`。
-- 不要设置 `publicPath`，否则资源引用会被前缀化，不再内联。
+- Large files (video, etc.) inflate the output by roughly 33% once base64-encoded; anything over 1 MB triggers a warning, and split mode is the better choice beyond that.
+- `splitting` is not supported.
+- Do not set `publicPath`, or asset references get prefixed and stop being inlined.
 
-以上限制在拆分模式下都不存在。
+None of these limitations apply to split mode.
