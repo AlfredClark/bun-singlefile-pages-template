@@ -7,6 +7,7 @@
     "build": "bun run build:single && bun run build:split",
     "build:single": "bun scripts/single-build.ts",
     "build:split": "bun scripts/split-build.ts",
+    "new": "bun scripts/new-page.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
