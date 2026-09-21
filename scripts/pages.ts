@@ -9,7 +9,7 @@ function normalizePage(arg: string): string {
   return p.replace(/^pages\//, "");
 }
 
-async function discoverPages(): Promise<string[]> {
+export async function discoverPages(): Promise<string[]> {
   const entries = await readdir(pagesDir);
   const pages: string[] = [];
   for (const name of entries) {
